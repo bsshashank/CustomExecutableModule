@@ -1,0 +1,54 @@
+{
+  "name": "HelloWorldModule",
+  "productName": "HelloWorldModule",
+  "description": "A Hello World module for the Electron boilerplate",
+  "version": "0.1.0",
+  "author": "Andreas Gerlach <andi@appelgriebsch.org>",
+  "main": "app/HelloWorld.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/appelgriebsch/electron-boilerplate.git"
+  },
+  "keywords": [
+    "electron",
+    "boilerplate",
+    "reactjs",
+    "HelloWorldModule"
+  ],
+  "babel": {
+    "presets": [
+      "es2015",
+      "react"
+    ],
+    "plugins": [
+      "babel-plugin-transform-flow-strip-types"
+    ]
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/appelgriebsch/electron-boilerplate/issues"
+  },
+  "homepage": "https://github.com/appelgriebsch/electron-boilerplate/tree/reactjs#readme",
+  "scripts": {
+    "postinstall": "npm run app-install",
+    "app-install": "cd app && npm install --no-optional",
+    "build": "npm run app-build && npm run app-prune && npm run build-asar",
+    "app-build": "babel --presets es2015,react --plugins babel-plugin-transform-flow-strip-types --ignore node_modules/ --compact true --source-maps inline --minified --extensions .jsx app/ -d app/",
+    "app-prune": "cd app && npm prune --production",
+    "build-asar": "asar p app/ build/$npm_package_productName.asar",
+    "generate-docs": "jsdoc -c jsdoc.json",
+    "lint": "standard \"app/**/*.jsx\"",
+    "reformat": "npm run lint || standard \"app/**/*.jsx\" --fix"
+  },
+  "devDependencies": {
+    "asar": "^0.12.0",
+    "babel-cli": "^6.6.5",
+    "babel-plugin-transform-flow-strip-types": "^6.14.0",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-react": "^6.5.0",
+    "docdash": "^0.4.0",
+    "jsdoc": "^3.4.0",
+    "jsdoc-babel": "^0.2.1",
+    "standard": "^8.0.0"
+  }
+}

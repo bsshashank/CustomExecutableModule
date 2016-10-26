@@ -1,0 +1,32 @@
+{
+  "name": "HelloWorldModule",
+  "description": "A Hello World module for the Electron boilerplate",
+  "version": "0.1.0",
+  "author": "Andreas Gerlach <andi@appelgriebsch.org>",
+  "main": "HelloWorld.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/appelgriebsch/electron-boilerplate.git"
+  },
+  "keywords": [
+    "electron",
+    "boilerplate",
+    "reactjs",
+    "HelloWorldModule"
+  ],
+  "config": {
+    "label": "Hello World",
+    "path": "helloWorld",
+    "icon": "",
+    "banner": "assets/hello-world-banner.jpg"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/appelgriebsch/electron-boilerplate/issues"
+  },
+  "homepage": "https://github.com/appelgriebsch/electron-boilerplate/tree/reactjs#readme",
+  "devDependencies": {
+    "radium": "^0.18.0",
+    "react": "^15.0.0"
+  }
+}
