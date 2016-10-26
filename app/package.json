@@ -17,7 +17,7 @@
   "config": {
     "label": "Hello World",
     "path": "helloWorld",
-    "icon": "",
+    "icon": "extension",
     "banner": "assets/hello-world-banner.jpg"
   },
   "license": "MIT",
@@ -25,7 +25,7 @@
     "url": "https://github.com/appelgriebsch/electron-boilerplate/issues"
   },
   "homepage": "https://github.com/appelgriebsch/electron-boilerplate/tree/reactjs#readme",
-  "devDependencies": {
+  "dependencies": {
     "radium": "^0.18.0",
     "react": "^15.0.0"
   }

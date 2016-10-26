@@ -5,6 +5,17 @@ import Radium from 'radium'
 
 class HelloWorld extends React.Component {
 
+  constructor (props) {
+    super(props)
+  }
+
+  render () {
+    return (
+      <div>
+        Hello World from HelloWorldModule
+      </div>
+    )
+  }
 }
 
-exports default Radium(HelloWorld)
+export default Radium(HelloWorld)
