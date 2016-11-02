@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Radium from 'radium'
+import { Content, Spinner } from 'react-mdl'
 
 class HelloWorld extends React.Component {
 
@@ -12,6 +13,7 @@ class HelloWorld extends React.Component {
   render () {
     return (
       <div>
+        <Spinner singleColor />
         Hello World from HelloWorldModule
       </div>
     )
