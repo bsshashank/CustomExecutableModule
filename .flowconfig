@@ -1,9 +1,11 @@
 [ignore]
+./node_modules/
 
 [include]
-./app/
 
 [libs]
-./node_modules/electron
+./node_modules/electron-shell-lib/types/
+./types/
 
 [options]
+unsafe.enable_getters_and_setters=true

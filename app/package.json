@@ -1,5 +1,5 @@
 {
-  "name": "HelloWorldModule",
+  "name": "HelloWorld",
   "description": "A Hello World module for the Electron boilerplate",
   "version": "0.1.0",
   "author": "Andreas Gerlach <andi@appelgriebsch.org>",
@@ -14,21 +14,20 @@
     "reactjs",
     "HelloWorldModule"
   ],
-  "config": {
-    "label": "Hello World",
-    "path": "helloWorld",
-    "icon": "extension",
-    "banner": "assets/hello-world-banner.jpg"
-  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/appelgriebsch/electron-boilerplate/issues"
   },
   "homepage": "https://github.com/appelgriebsch/electron-boilerplate/tree/reactjs#readme",
   "devDependencies": {
-    "radium": "^0.18.0",
-    "react": "^15.0.0",
-    "react-dom": "^15.1.0",
-    "react-mdl": "^1.5.4"
+    "electron-shell-lib": "appelgriebsch/electron-shell-lib",
+    "electron-shell-ui": "appelgriebsch/electron-shell-ui",
+    "radium": "^0.18.2",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-intl": "^2.2.3",
+    "react-router-dom": "^4.0.0",
+    "reflux": "^6.4.1",
+    "spectre.css": "^0.2.12"
   }
 }
