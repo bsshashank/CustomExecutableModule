@@ -26,6 +26,7 @@
     "radium": "^0.18.2",
     "react": "^15.5.3",
     "react-dom": "^15.5.3",
+    "react-icons-kit": "^1.0.5",
     "react-intl": "^2.2.3",
     "react-router-dom": "^4.0.0",
     "reflux": "^6.4.1",

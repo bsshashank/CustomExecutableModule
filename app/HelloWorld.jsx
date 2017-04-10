@@ -4,8 +4,6 @@ import React from 'react'
 import path from 'path'
 
 import { defineMessages } from 'react-intl'
-
-import Icon from 'react-icons-kit'
 import { ic_explore } from 'react-icons-kit/md/ic_explore'
 
 import packageInfo from './package.json'
@@ -81,7 +79,7 @@ class HelloWorld implements IExtension {
 
     get linkIcon(): React$Element<*> {
       return (
-        <Icon icon={ic_explore} size={24} />
+        ic_explore
       )
     }
 
