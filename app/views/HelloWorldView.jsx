@@ -4,14 +4,16 @@ import React from 'react'
 import Radium from 'radium'
 import Reflux from 'reflux'
 
-import { TranslatedMessage } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 
 class HelloWorldView extends Reflux.Component {
 
   render () {
     return (
       <div>
-        Hello World from HelloWorldModule
+        <FormattedMessage  id='ext.helloworld.main.welcometext'
+                           description='Hello World Welcome text'
+                           defaultMessage='Hello World' />
       </div>
     )
   }

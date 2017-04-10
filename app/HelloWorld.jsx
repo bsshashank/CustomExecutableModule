@@ -1,6 +1,12 @@
 //@flow
 
+import React from 'react'
 import path from 'path'
+
+import { defineMessages } from 'react-intl'
+
+import Icon from 'react-icons-kit'
+import { ic_explore } from 'react-icons-kit/md/ic_explore'
 
 import packageInfo from './package.json'
 import HelloWorldView from './views/HelloWorldView'
@@ -11,6 +17,18 @@ class HelloWorld implements IExtension {
 
     register(settingsManager: ISettingManager, translationManager: ITranslationManager): Promise<*> {
       let regPromise = new Promise((resolve, reject) => {
+        const messages = defineMessages({
+          extName: {
+            id: 'ext.helloworld.name',
+            description: 'The translated name of the HelloWorld extension',
+            defaultMessage: 'HelloWorld'
+          },
+          extDescription: {
+            id: 'ext.helloworld.description',
+            description: 'The translated description of the HelloWorld extension',
+            defaultMessage: 'A Hello World module for the Electron boilerplate'
+          }
+        })
         resolve({})
       })
 
@@ -58,7 +76,13 @@ class HelloWorld implements IExtension {
     }
 
     get initialRoute(): string {
-      return this.name.toLowerCase()
+      return packageInfo.name.toLowerCase()
+    }
+
+    get linkIcon(): React$Element<*> {
+      return (
+        <Icon icon={ic_explore} size={24} />
+      )
     }
 
     get mainView(): React$Element<*> {

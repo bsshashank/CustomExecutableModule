@@ -46,10 +46,13 @@
     "postinstall": "cd app && npm install --no-optional",
     "start": "electron-shell --debug app/",
     "compile": "babel --ignore node_modules/ --compact true --source-maps inline --minified --extensions .jsx app/ -d app/",
-    "asar": "asar p app/ build/$npm_package_productName.asar",
-    "prune": "cd app && npm prune --production",
+    "package": "cross-env NODE_ENV=production npm run postinstall && asar p app/ build/$npm_package_productName.asar",
+    "prune": "rimraf app/node_modules",
     "test": "jest",
-    "build": "npm run compile && npm run prune && npm run asar",
+    "build": "npm run compile && npm run prune && npm run package",
+    "compile-scripts": "babel --ignore node_modules --compact true --source-maps inline --minified --extensions .jsx build/ -d build/",
+    "clean-translations": "rimraf build/translations",
+    "gen-translations": "npm run -s clean-translations && npm run -s compile && npm run -s compile-scripts && node build/gen_translations.js",
     "generate-docs": "jsdoc -c jsdoc.json",
     "lint": "standard \"app/**/*.jsx\"",
     "reformat": "npm run lint || standard \"app/**/*.jsx\" --fix"
@@ -63,9 +66,12 @@
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-react": "^6.23.0",
+    "cross-env": "^4.0.0",
+    "glob-promise": "^3.1.0",
     "jest-cli": "^19.0.2",
     "jsdoc": "^3.4.3",
     "jsdoc-babel": "^0.3.0",
+    "rimraf": "^2.6.1",
     "standard": "^10.0.0"
   }
 }
