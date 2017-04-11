@@ -27,7 +27,8 @@ class HelloWorld implements IExtension {
             defaultMessage: 'A Hello World module for the Electron boilerplate'
           }
         })
-        resolve({})
+        let msgs = require(path.join(__dirname, 'assets/msgs/en-US.json'))
+        translationManager.import.triggerAsync('en-US', msgs).then(resolve).catch(reject)
       })
 
       return regPromise
@@ -41,12 +42,7 @@ class HelloWorld implements IExtension {
       return unregPromise
     }
 
-    initialize(fileStorage: IFileStorage, settings: Array<SettingType>): Promise<*> {
-      let initPromise = new Promise((resolve, reject) => {
-
-      })
-
-      return initPromise
+    initialize(fileStorage: IFileStorage, settings: Array<SettingType>): void {
     }
 
     get id(): string {
