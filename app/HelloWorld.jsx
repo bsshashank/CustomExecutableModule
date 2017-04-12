@@ -29,7 +29,7 @@ class HelloWorld implements IExtension {
       })
     }
 
-    register(settingsManager: ISettingManager, translationManager: ITranslationManager): Promise<*> {
+    register(fileStorage: IFileStorage, settingsManager: ISettingManager, translationManager: ITranslationManager): Promise<*> {
       let regPromise = new Promise((resolve, reject) => {
         let msgs = require(path.join(__dirname, 'assets/msgs/en-US.json'))
         translationManager.import.triggerAsync('en-US', msgs).then(resolve).catch(reject)
@@ -38,7 +38,7 @@ class HelloWorld implements IExtension {
       return regPromise
     }
 
-    unregister(settingsManager: ISettingManager, translationManager: ITranslationManager): Promise<*> {
+    unregister(fileStorage: IFileStorage, settingsManager: ISettingManager, translationManager: ITranslationManager): Promise<*> {
       let unregPromise = new Promise((resolve, reject) => {
 
       })
@@ -46,7 +46,7 @@ class HelloWorld implements IExtension {
       return unregPromise
     }
 
-    initialize(fileStorage: IFileStorage, settings: Array<SettingType>): void {
+    initialize(fileStorage: IFileStorage, settings: Object): void {
     }
 
     get id(): string {
@@ -70,11 +70,7 @@ class HelloWorld implements IExtension {
     }
 
     get bannerImage(): string {
-      return path.join(__dirname, 'assets', 'hello-world-banner.jpg')
-    }
-
-    get initialRoute(): string {
-      return `ext.${packageInfo.name.toLowerCase()}`
+      return path.join('assets', 'hello-world-banner.jpg')
     }
 
     get linkIcon(): React$Element<*> {
