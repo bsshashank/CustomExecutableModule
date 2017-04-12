@@ -9,24 +9,28 @@ import { ic_explore } from 'react-icons-kit/md/ic_explore'
 import packageInfo from './package.json'
 import HelloWorldView from './views/HelloWorldView'
 
-import type { IExtension, IFileStorage, ISettingManager, ITranslationManager, SettingType } from 'electron-shell-lib'
+import type { IExtension, IFileStorage, ISettingManager, ITranslationManager, SettingType, TranslatableMessage } from 'electron-shell-lib'
 
 class HelloWorld implements IExtension {
 
+    messages:Object
+    constructor() {
+      this.messages = defineMessages({
+        extName: {
+          id: 'ext.helloworld.name',
+          description: 'The translated name of the HelloWorld extension',
+          defaultMessage: 'Hello World'
+        },
+        extDescription: {
+          id: 'ext.helloworld.description',
+          description: 'The translated description of the HelloWorld extension',
+          defaultMessage: 'A Hello World module for the Electron boilerplate'
+        }
+      })
+    }
+
     register(settingsManager: ISettingManager, translationManager: ITranslationManager): Promise<*> {
       let regPromise = new Promise((resolve, reject) => {
-        const messages = defineMessages({
-          extName: {
-            id: 'ext.helloworld.name',
-            description: 'The translated name of the HelloWorld extension',
-            defaultMessage: 'HelloWorld'
-          },
-          extDescription: {
-            id: 'ext.helloworld.description',
-            description: 'The translated description of the HelloWorld extension',
-            defaultMessage: 'A Hello World module for the Electron boilerplate'
-          }
-        })
         let msgs = require(path.join(__dirname, 'assets/msgs/en-US.json'))
         translationManager.import.triggerAsync('en-US', msgs).then(resolve).catch(reject)
       })
@@ -49,16 +53,16 @@ class HelloWorld implements IExtension {
       return packageInfo.name
     }
 
-    get name(): string {
-      return packageInfo.name
+    get name(): TranslatableMessage {
+      return this.messages.extName
     }
 
     get version(): string {
       return packageInfo.version
     }
 
-    get description(): string {
-      return packageInfo.description
+    get description(): TranslatableMessage {
+      return this.messages.extDescription
     }
 
     get author(): string {
@@ -70,7 +74,7 @@ class HelloWorld implements IExtension {
     }
 
     get initialRoute(): string {
-      return packageInfo.name.toLowerCase()
+      return `ext.${packageInfo.name.toLowerCase()}`
     }
 
     get linkIcon(): React$Element<*> {
