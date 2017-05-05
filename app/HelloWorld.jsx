@@ -9,13 +9,17 @@ import { ic_explore } from 'react-icons-kit/md/ic_explore'
 import packageInfo from './package.json'
 import HelloWorldView from './views/HelloWorldView'
 
-import type { IExtension, IFileStorage, ISettingManager, ITranslationManager, SettingType, TranslatableMessage } from 'electron-shell-lib'
+import type { ICommandHandler, IExtension, IFileStorage, ISettingManager, ITranslationManager, SettingType, TranslatableMessage } from 'electron-shell-lib'
 
 class HelloWorld implements IExtension {
 
-    messages:Object
+    _messages:Object
+    _settings: Array<SettingType>
+    _fileStorage: IFileStorage
+    _defaultRoute: string
+
     constructor() {
-      this.messages = defineMessages({
+      this._messages = defineMessages({
         extName: {
           id: 'ext.helloworld.name',
           description: 'The translated name of the HelloWorld extension',
@@ -46,7 +50,10 @@ class HelloWorld implements IExtension {
       return unregPromise
     }
 
-    initialize(fileStorage: IFileStorage, settings: Object): void {
+    initialize(fileStorage: IFileStorage, commandHandler: ICommandHandler, settings: Array<SettingType>, defaultRoute: string): void {
+      this._fileStorage = fileStorage
+      this._settings = settings
+      this._defaultRoute = defaultRoute
     }
 
     get id(): string {
@@ -54,7 +61,7 @@ class HelloWorld implements IExtension {
     }
 
     get name(): TranslatableMessage {
-      return this.messages.extName
+      return this._messages.extName
     }
 
     get version(): string {
@@ -62,7 +69,7 @@ class HelloWorld implements IExtension {
     }
 
     get description(): TranslatableMessage {
-      return this.messages.extDescription
+      return this._messages.extDescription
     }
 
     get author(): string {
@@ -71,6 +78,18 @@ class HelloWorld implements IExtension {
 
     get bannerImage(): string {
       return path.join('assets', 'hello-world-banner.jpg')
+    }
+
+    get fileStorage(): IFileStorage {
+      return this._fileStorage
+    }
+
+    get settings(): Array<SettingType> {
+      return this._settings
+    }
+
+    get defaultRoute(): string {
+      return this._defaultRoute
     }
 
     get linkIcon(): React$Element<*> {
