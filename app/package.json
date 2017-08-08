@@ -1,9 +1,9 @@
 {
-  "name": "HelloWorld",
-  "description": "A Hello World module for the Electron boilerplate",
+  "name": "CustomExecutableModule",
+  "description": "A CustomExecutableModule module for the Electron boilerplate",
   "version": "0.1.0",
   "author": "Andreas Gerlach <andi@appelgriebsch.org>",
-  "main": "HelloWorld.js",
+  "main": "CustomExecutable.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/appelgriebsch/electron-boilerplate.git"

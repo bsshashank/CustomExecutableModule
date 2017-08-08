@@ -6,6 +6,7 @@ import appPackage from '../app/package.json'
 
 glob(__dirname + '/translations/**/*.json')
   .then((translations) => {
+    console.log('translations ' + translations)
     let docs = []
     translations.forEach((translation) => {
       let messages = require(translation)

@@ -7,11 +7,12 @@ import { defineMessages } from 'react-intl'
 import { ic_explore } from 'react-icons-kit/md/ic_explore'
 
 import packageInfo from './package.json'
-import HelloWorldView from './views/HelloWorldView'
+import CustomExecutableView from './views/CustomExecutableView'
+// import ExecutableCreationWizard from './components/ExecutableCreationWizard'
 
 import type { ICommandHandler, IExtension, IFileStorage, ISettingManager, ITranslationManager, SettingType, TranslatableMessage } from 'electron-shell-lib'
 
-class HelloWorld implements IExtension {
+class CustomExecutable implements IExtension {
 
     _messages:Object
     _settings: Array<SettingType>
@@ -21,14 +22,14 @@ class HelloWorld implements IExtension {
     constructor() {
       this._messages = defineMessages({
         extName: {
-          id: 'ext.helloworld.name',
-          description: 'The translated name of the HelloWorld extension',
-          defaultMessage: 'Hello World'
+          id: 'ext.customexecutable.name',
+          description: 'The translated name of the CustomExecutable extension',
+          defaultMessage: 'Custom Executable'
         },
         extDescription: {
-          id: 'ext.helloworld.description',
-          description: 'The translated description of the HelloWorld extension',
-          defaultMessage: 'A Hello World module for the Electron boilerplate'
+          id: 'ext.customexecutable.description',
+          description: 'The translated description of the CustomExecutable extension',
+          defaultMessage: 'A Custom Executable module for the Electron boilerplate'
         }
       })
     }
@@ -99,7 +100,7 @@ class HelloWorld implements IExtension {
     }
 
     get mainView(): React$Element<*> {
-      return HelloWorldView
+      return CustomExecutableView
     }
 
     get settingView(): ?React$Element<*> {
@@ -107,5 +108,5 @@ class HelloWorld implements IExtension {
     }
 }
 
-let singletonInstance = new HelloWorld()
+let singletonInstance = new CustomExecutable()
 exports.instance = singletonInstance
