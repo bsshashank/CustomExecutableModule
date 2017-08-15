@@ -39,7 +39,7 @@ class CustomExecutableView extends Reflux.Component {
   }
 
   toggleDisplayModule(jsonModule) {
-    console.log('jsonModule from executable view ' + JSON.stringify(jsonModule))
+    // console.log('jsonModule from executable view ' + JSON.stringify(jsonModule))
     if (this.state.displayWizard == true) {
       this.setState((prevState, props) => {
         return {

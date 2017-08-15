@@ -22,17 +22,19 @@ class ExecutableCreationWizard extends Reflux.Component {
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handleDescriptionChange = this.handleDescriptionChange.bind(this)
     this.handleFileChange = this.handleFileChange.bind(this)
+    this.executeModule = this.executeModule.bind(this)
     // this.displayModules = this.props.displayModules
     this.workingFolder = path.join(this.fileStorage.config.paths.data, this.fileStorage.extension)
 
     console.log('jsonModule passed in as props ' + this.props.jsonModule)
 
-    if (this.props.jsonModule == '') {
+    if (this.props.jsonModule === '') {
       this.state = {
         editable: true,
         executableModuleName: '',
         executableModuleDescription: '',
-        executableModuleFile: ''
+        executableModuleFile: '',
+        executableModuleOutputFilePath: ''
       }
     }
     else {
@@ -42,7 +44,8 @@ class ExecutableCreationWizard extends Reflux.Component {
         editable: false,
         executableModuleName: jsonModule.name,
         executableModuleDescription: jsonModule.description,
-        executableModuleFile: jsonModule.files
+        executableModuleFile: jsonModule.files,
+        executableModuleOutputFilePath: jsonModule.outputFilePath
       }
     }
 
@@ -58,7 +61,7 @@ class ExecutableCreationWizard extends Reflux.Component {
     const jsonModule = {
       name: name,
       description: description,
-      files: JSON.stringify(files)
+      files: files
     }
     return jsonModule
   }
@@ -95,8 +98,13 @@ class ExecutableCreationWizard extends Reflux.Component {
     })
   }
 
+  handleexecutableModuleOutputFileChange(outputFile) {
+    this.setState({ executableModuleOutputFilePath: event.target.value })
+  }
+
   executeModule() {
-      const child = execFile('node', ['--version'], (error, stdout, stderr) => {
+      let executablePath = path.join(this.state.executableModuleFile.pop())
+      const child = execFile(executablePath, ['--version'], (error, stdout, stderr) => {
       if (error) {
         throw error;
       }
@@ -121,6 +129,10 @@ class ExecutableCreationWizard extends Reflux.Component {
           <textarea className='form-input' id='executableModuleDescription' value={this.state.executableModuleDescription} onChange={this.handleDescriptionChange} placeholder='Description about the executableModule' rows='2' />
         </div>
         <div className='form-group'>
+          <label className='form-label'>Output file path</label>
+          <textarea className='form-input' id='executableModuleOutputFile' value={this.state.executableModuleOutputFile} onChange={this.handleexecutableModuleOutputFileChange} placeholder='File path where the output must be stored' rows='2' />
+        </div>
+        <div className='form-group'>
           <label className='form-label'>Executable File</label>
           {/*<input class='form-input' type='file' onChange={this.handleFileChange} id='executableModuleFile' value={this.state.executableModuleFile} />*/}
           <Dropzone key="dropZone" onDrop={this.handleFileChange} multiple
@@ -141,7 +153,7 @@ class ExecutableCreationWizard extends Reflux.Component {
           </div>
           </Dropzone>
         </div>
-        <button className='btn btn-primary' type='button' value={this.state.executableModuleFile} onClick={this.handleSubmit}>Create Module</button>
+        <button className='btn btn-primary' type='button' value={this.state.executableModuleFile} onClick={this.handleSubmit}>Save Module</button>
         <button className='btn btn-primary' type='button' onClick={this.props.displayModules}>Cancel</button>
         {this.state.editable ? null : <button className='btn btn-primary' type='button' onClick={this.executeModule}>Execute module</button>}
         {/*</fieldset>*/}

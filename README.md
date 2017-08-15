@@ -1,2 +1,2 @@
 # HelloWorldModule
-A Hello World module for the Electron boilerplate
+A module for the Electron boilerplate to create modules for custom executables

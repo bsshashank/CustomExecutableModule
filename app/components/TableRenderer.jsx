@@ -25,8 +25,12 @@ class TableRenderer extends Reflux.Component {
     this.updateView = this.updateView.bind(this)
   }
 
-  updateView() {
-    this.props.displayModule(this.state.jsonModuleName)
+  updateView(moduleName) {
+    this.setState({displayWizard: false, jsonModule: moduleName}, () => {
+      console.log('moduleName in TableRenderer from updateView ' + moduleName)
+      // console.log('moduleName in state after state update ' + this.state.jsonModuleName)
+      this.props.displayModule(moduleName)
+    })
   }
 
   render() {
@@ -45,7 +49,7 @@ class TableRenderer extends Reflux.Component {
           <td key={jsonModule.name}>{jsonModule.name}</td>
           <td key={jsonModule.description}>{jsonModule.description}</td>
           {/*<td key='files'>{getFileString(jsonModule.files)}</td>*/}
-          <td key={jsonModule.name + 'button'}><button onClick={this.updateView} className="btn btn-primary">Open module</button></td>
+          <td key={jsonModule.name + 'button'}><button onClick={() => this.updateView(jsonModule.name)} className="btn btn-primary">Open module</button></td>
         </tr>
       )
     }
