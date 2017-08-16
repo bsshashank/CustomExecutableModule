@@ -22,6 +22,7 @@ class ExecutableCreationWizard extends Reflux.Component {
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handleDescriptionChange = this.handleDescriptionChange.bind(this)
     this.handleFileChange = this.handleFileChange.bind(this)
+    this.handleexecutableModuleOutputFileChange =this.handleexecutableModuleOutputFileChange.bind(this)
     this.executeModule = this.executeModule.bind(this)
     // this.displayModules = this.props.displayModules
     this.workingFolder = path.join(this.fileStorage.config.paths.data, this.fileStorage.extension)
@@ -54,13 +55,14 @@ class ExecutableCreationWizard extends Reflux.Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    this.createModule(this.state.executableModuleName, this.state.executableModuleDescription, this.filesToUpload)
+    this.createModule(this.generateJson(this.state.executableModuleName, this.state.executableModuleDescription, this.state.executableModuleOutputFilePath, this.filesToUpload))
   }
 
-  generateJson(name, description, files) {
+  generateJson(name, description, outputFilePath, files) {
     const jsonModule = {
       name: name,
       description: description,
+      outputFilePath: outputFilePath,
       files: files
     }
     return jsonModule
@@ -68,9 +70,6 @@ class ExecutableCreationWizard extends Reflux.Component {
 
   getJson(moduleName) {
     return jsonfile.readFileSync(path.join(this.workingFolder, moduleName + '.json'))
-    /*return jsonfile.readFile(path.join(this.workingFolder, moduleName + '.json'), (jsonModule) => {
-      return jsonModule
-    })*/
   }
 
   saveJson(jsonModule) {
@@ -79,8 +78,7 @@ class ExecutableCreationWizard extends Reflux.Component {
     })
   }
 
-  createModule(name, description, executableFiles) {
-    const jsonModule = this.generateJson(name, description, executableFiles)
+  createModule(jsonModule) {
     this.saveJson(jsonModule)
   }
 
@@ -98,7 +96,7 @@ class ExecutableCreationWizard extends Reflux.Component {
     })
   }
 
-  handleexecutableModuleOutputFileChange(outputFile) {
+  handleexecutableModuleOutputFileChange(event) {
     this.setState({ executableModuleOutputFilePath: event.target.value })
   }
 
