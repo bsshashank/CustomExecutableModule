@@ -23,6 +23,7 @@ class ExecutableCreationWizard extends Reflux.Component {
     this.handleDescriptionChange = this.handleDescriptionChange.bind(this)
     this.handleFileChange = this.handleFileChange.bind(this)
     this.handleexecutableModuleOutputFileChange =this.handleexecutableModuleOutputFileChange.bind(this)
+    this.handleFormInputChange = this.handleFormInputChange.bind(this)
     this.executeModule = this.executeModule.bind(this)
     // this.displayModules = this.props.displayModules
     this.workingFolder = path.join(this.fileStorage.config.paths.data, this.fileStorage.extension)
@@ -82,22 +83,14 @@ class ExecutableCreationWizard extends Reflux.Component {
     this.saveJson(jsonModule)
   }
 
-  handleNameChange(event) {
-    this.setState({ executableModuleName: event.target.value })
-  }
-
-  handleDescriptionChange(event) {
-    this.setState({ executableModuleDescription: event.target.value })
-  }
-
   handleFileChange(files) {
     files.map((file) => {
       this.filesToUpload.push(path.join(file.path))
     })
   }
 
-  handleexecutableModuleOutputFileChange(event) {
-    this.setState({ executableModuleOutputFilePath: event.target.value })
+  handleFormInputChange(event) {
+    this.setState({ [event.target.name]: event.target.value })
   }
 
   executeModule() {
@@ -120,15 +113,15 @@ class ExecutableCreationWizard extends Reflux.Component {
         {/*<fieldset {...props}>*/}
         <div className='form-group'>
           <label className='form-label'>Name</label>
-          <input className='form-input' type='text' id='executableModuleName' value={this.state.executableModuleName} onChange={this.handleNameChange} placeholder='Name of the new Executable' />
+          <input className='form-input' type='text' id='executableModuleName' name='executableModuleName' value={this.state.executableModuleName} onChange={this.handleFormInputChange} placeholder='Name of the new Executable' />
         </div>
         <div className='form-group'>
           <label className='form-label'>Description</label>
-          <textarea className='form-input' id='executableModuleDescription' value={this.state.executableModuleDescription} onChange={this.handleDescriptionChange} placeholder='Description about the executableModule' rows='2' />
+          <textarea className='form-input' id='executableModuleDescription' name='executableModuleDescription' value={this.state.executableModuleDescription} onChange={this.handleFormInputChange} placeholder='Description about the executableModule' rows='2' />
         </div>
         <div className='form-group'>
           <label className='form-label'>Output file path</label>
-          <textarea className='form-input' id='executableModuleOutputFile' value={this.state.executableModuleOutputFile} onChange={this.handleexecutableModuleOutputFileChange} placeholder='File path where the output must be stored' rows='2' />
+          <textarea className='form-input' id='executableModuleOutputFile' name='executableModuleOutputFile' value={this.state.executableModuleOutputFile} onChange={this.handleFormInputChange} placeholder='File path where the output must be stored' rows='2' />
         </div>
         <div className='form-group'>
           <label className='form-label'>Executable File</label>
