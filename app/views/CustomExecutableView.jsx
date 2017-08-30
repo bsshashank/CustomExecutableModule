@@ -29,7 +29,6 @@ class CustomExecutableView extends Reflux.Component {
   }
 
   createModule(event) {
-    console.log('clicked on createNewModule button ')
     this.setState((prevState, props) => {
       return { displayWizard: true }
     })
@@ -39,7 +38,6 @@ class CustomExecutableView extends Reflux.Component {
   }
 
   toggleDisplayModule(jsonModule) {
-    // console.log('jsonModule from executable view ' + JSON.stringify(jsonModule))
     if (this.state.displayWizard == true) {
       this.setState((prevState, props) => {
         return {

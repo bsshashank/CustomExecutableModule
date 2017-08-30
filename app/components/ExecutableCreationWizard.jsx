@@ -19,13 +19,9 @@ class ExecutableCreationWizard extends Reflux.Component {
     super(props)
     this.fileStorage = this.props.fileStorage
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleNameChange = this.handleNameChange.bind(this)
-    this.handleDescriptionChange = this.handleDescriptionChange.bind(this)
     this.handleFileChange = this.handleFileChange.bind(this)
-    this.handleexecutableModuleOutputFileChange =this.handleexecutableModuleOutputFileChange.bind(this)
     this.handleFormInputChange = this.handleFormInputChange.bind(this)
     this.executeModule = this.executeModule.bind(this)
-    // this.displayModules = this.props.displayModules
     this.workingFolder = path.join(this.fileStorage.config.paths.data, this.fileStorage.extension)
 
     console.log('jsonModule passed in as props ' + this.props.jsonModule)
@@ -35,19 +31,23 @@ class ExecutableCreationWizard extends Reflux.Component {
         editable: true,
         executableModuleName: '',
         executableModuleDescription: '',
+        executableModuleOutputFilePath: '',
+        executableModuleArgs:'',
         executableModuleFile: '',
-        executableModuleOutputFilePath: ''
+        executableModuleOutput:'Output of the operation will be displayed here.'
       }
     }
     else {
       let jsonModule = this.getJson(this.props.jsonModule)
-      console.log('jsonModule read ' + jsonModule)
+      console.log('jsonModule ' + jsonModule)
       this.state = {
         editable: false,
         executableModuleName: jsonModule.name,
         executableModuleDescription: jsonModule.description,
+        executableModuleOutputFilePath: jsonModule.outputFilePath,
+        executableModuleArgs: jsonModule.args,
         executableModuleFile: jsonModule.files,
-        executableModuleOutputFilePath: jsonModule.outputFilePath
+        executableModuleOutput:'Output of the operation will be displayed here.'
       }
     }
 
@@ -56,14 +56,15 @@ class ExecutableCreationWizard extends Reflux.Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    this.createModule(this.generateJson(this.state.executableModuleName, this.state.executableModuleDescription, this.state.executableModuleOutputFilePath, this.filesToUpload))
+    this.createModule(this.generateJson(this.state.executableModuleName, this.state.executableModuleDescription, this.state.executableModuleOutputFilePath, this.state.executableModuleArgs, this.filesToUpload))
   }
 
-  generateJson(name, description, outputFilePath, files) {
+  generateJson(name, description, outputFilePath, args, files) {
     const jsonModule = {
       name: name,
       description: description,
       outputFilePath: outputFilePath,
+      args: args,
       files: files
     }
     return jsonModule
@@ -75,7 +76,10 @@ class ExecutableCreationWizard extends Reflux.Component {
 
   saveJson(jsonModule) {
     jsonfile.writeFile(path.join(this.workingFolder, jsonModule.name + '.json'), jsonModule, () => {
-      console.log('Module ' + jsonModule.name + ' has been successfully created')
+      if(this.state.editable)
+      {
+        this.props.displayModules()
+      }
     })
   }
 
@@ -94,61 +98,68 @@ class ExecutableCreationWizard extends Reflux.Component {
   }
 
   executeModule() {
-      let executablePath = path.join(this.state.executableModuleFile.pop())
-      const child = execFile(executablePath, ['--version'], (error, stdout, stderr) => {
+    let executablePath = path.join(this.state.executableModuleFile.pop())
+    let outputPath = path.join(this.state.executableModuleOutputFilePath)
+    let args = this.state.executableModuleArgs
+    const child = execFile(executablePath, [args], (error, stdout, stderr) => {
       if (error) {
         throw error;
       }
       console.log(stdout);
+      this.setState({ executableModuleOutput: stdout })
+      fs.writeFileSync(outputPath, stdout)
     })
   }
 
   render() {
-    /*let fieldSet = this.state.editable ? 'enabled' : 'disabled'
-
-    const props = {fieldSet}*/
-
     return (
-      <form>
-        {/*<fieldset {...props}>*/}
-        <div className='form-group'>
-          <label className='form-label'>Name</label>
-          <input className='form-input' type='text' id='executableModuleName' name='executableModuleName' value={this.state.executableModuleName} onChange={this.handleFormInputChange} placeholder='Name of the new Executable' />
-        </div>
-        <div className='form-group'>
-          <label className='form-label'>Description</label>
-          <textarea className='form-input' id='executableModuleDescription' name='executableModuleDescription' value={this.state.executableModuleDescription} onChange={this.handleFormInputChange} placeholder='Description about the executableModule' rows='2' />
-        </div>
-        <div className='form-group'>
-          <label className='form-label'>Output file path</label>
-          <textarea className='form-input' id='executableModuleOutputFile' name='executableModuleOutputFile' value={this.state.executableModuleOutputFile} onChange={this.handleFormInputChange} placeholder='File path where the output must be stored' rows='2' />
-        </div>
-        <div className='form-group'>
-          <label className='form-label'>Executable File</label>
-          {/*<input class='form-input' type='file' onChange={this.handleFileChange} id='executableModuleFile' value={this.state.executableModuleFile} />*/}
-          <Dropzone key="dropZone" onDrop={this.handleFileChange} multiple
-            style={{
-              width: '62%',
-              margin: 'auto',
-              marginTop: '2em',
-              marginBottom: '2em',
-              borderStyle: 'dashed',
-              height: '5em',
-              borderWidth: '2px',
-              borderColor: 'gray',
-              textAlign: 'center',
-              verticalAlign: 'middle'
-            }}>
-            <div style={{ marginTop: '1.5em', marginBottom: '1.5em' }}>
-              Drop files or click here to select and upload the executable files and all the necessary additional files for processing
+    <form>
+      <div className='form-group'>
+        <label className='form-label'>Name</label>
+        <input className='form-input' type='text' id='executableModuleName' name='executableModuleName' value={this.state.executableModuleName} onChange={this.handleFormInputChange} placeholder='Name of the new Executable' />
+      </div>
+      <div className='form-group'>
+        <label className='form-label'>Description</label>
+        <textarea className='form-input' id='executableModuleDescription' name='executableModuleDescription' value={this.state.executableModuleDescription} onChange={this.handleFormInputChange} placeholder='Description about the executableModule' rows='2' />
+      </div>
+      <div className='form-group'>
+        <label className='form-label'>Output file path</label>
+        <textarea className='form-input' id='executableModuleOutputFilePath' name='executableModuleOutputFilePath' value={this.state.executableModuleOutputFilePath} onChange={this.handleFormInputChange} placeholder='File path where the output must be stored' rows='2' />
+      </div>
+      <div className='form-group'>
+        <label className='form-label'>Program arguments</label>
+        <textarea className='form-input' id='executableModuleArgs' name='executableModuleArgs' value={this.state.executableModuleArgs} onChange={this.handleFormInputChange} placeholder='Arguments to be supplied for the Executable Module' rows='2' />
+      </div>
+      <div className='form-group'>
+        <label className='form-label'>Executable File</label>
+        <Dropzone key="dropZone" onDrop={this.handleFileChange} multiple
+          style={{
+            width: '62%',
+            margin: 'auto',
+            marginTop: '2em',
+            marginBottom: '2em',
+            borderStyle: 'dashed',
+            height: '5em',
+            borderWidth: '2px',
+            borderColor: 'gray',
+            textAlign: 'center',
+            verticalAlign: 'middle'
+          }}>
+          <div style={{ marginTop: '1.5em', marginBottom: '1.5em' }}>
+            Drop files or click here to select and upload the executable files and all the necessary additional files for processing
           </div>
-          </Dropzone>
-        </div>
-        <button className='btn btn-primary' type='button' value={this.state.executableModuleFile} onClick={this.handleSubmit}>Save Module</button>
-        <button className='btn btn-primary' type='button' onClick={this.props.displayModules}>Cancel</button>
-        {this.state.editable ? null : <button className='btn btn-primary' type='button' onClick={this.executeModule}>Execute module</button>}
-        {/*</fieldset>*/}
-      </form>
+        </Dropzone>
+      </div>
+      <button className='btn btn-primary' type='button' value={this.state.executableModuleFile} onClick={this.handleSubmit}>Save Module</button>
+      <button className='btn btn-primary' type='button' onClick={this.props.displayModules}>Cancel</button>
+      {this.state.editable ? null : <button className='btn btn-primary' type='button' onClick={this.executeModule}>Execute module</button>}
+      <div className="form-group">
+        <label className="form-label">Output</label>
+        <fieldset disabled>
+          <textarea className="form-input" id="executableModuleOutput" value={this.state.executableModuleOutput} onChange={this.handleFormInputChange} rows="3"></textarea>
+        </fieldset>
+      </div>
+    </form>
     )
   }
 }

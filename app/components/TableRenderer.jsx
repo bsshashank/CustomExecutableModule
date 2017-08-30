@@ -27,8 +27,6 @@ class TableRenderer extends Reflux.Component {
 
   updateView(moduleName) {
     this.setState({displayWizard: false, jsonModule: moduleName}, () => {
-      console.log('moduleName in TableRenderer from updateView ' + moduleName)
-      // console.log('moduleName in state after state update ' + this.state.jsonModuleName)
       this.props.displayModule(moduleName)
     })
   }
