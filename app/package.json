@@ -30,6 +30,10 @@
     "react-intl": "^2.2.3",
     "react-router-dom": "^4.0.0",
     "reflux": "^6.4.1",
-    "spectre.css": "^0.2.12"
+    "spectre.css": "^0.2.12",
+    "jsonfile": "^3.0.1"
+  },
+  "dependencies": {
+    "jsonfile": "^3.0.1"
   }
 }

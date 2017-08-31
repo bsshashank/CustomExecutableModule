@@ -39,7 +39,7 @@ class ExecutableCreationWizard extends Reflux.Component {
     }
     else {
       let jsonModule = this.getJson(this.props.jsonModule)
-      console.log('jsonModule ' + jsonModule)
+      console.log('jsonModule ' + JSON.stringify(jsonModule))
       this.state = {
         editable: false,
         executableModuleName: jsonModule.name,
@@ -101,6 +101,7 @@ class ExecutableCreationWizard extends Reflux.Component {
     let executablePath = path.join(this.state.executableModuleFile.pop())
     let outputPath = path.join(this.state.executableModuleOutputFilePath)
     let args = this.state.executableModuleArgs
+    console.log('args passed ' + args)
     const child = execFile(executablePath, [args], (error, stdout, stderr) => {
       if (error) {
         throw error;

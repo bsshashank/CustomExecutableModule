@@ -72,9 +72,10 @@
     "jsdoc": "^3.4.3",
     "jsdoc-babel": "^0.3.0",
     "rimraf": "^2.6.1",
-    "standard": "^10.0.0"
+    "standard": "^10.0.0",
+    "jsonfile": "^3.0.1"
   },
   "dependencies": {
-    "jsonfile": "^3.0.1"
+
   }
 }
