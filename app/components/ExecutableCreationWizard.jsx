@@ -50,13 +50,11 @@ class ExecutableCreationWizard extends Reflux.Component {
         executableModuleOutput:'Output of the operation will be displayed here.'
       }
     }
-
-    this.filesToUpload = []
   }
 
   handleSubmit(event) {
     event.preventDefault()
-    this.createModule(this.generateJson(this.state.executableModuleName, this.state.executableModuleDescription, this.state.executableModuleOutputFilePath, this.state.executableModuleArgs, this.filesToUpload))
+    this.createModule(this.generateJson(this.state.executableModuleName, this.state.executableModuleDescription, this.state.executableModuleOutputFilePath, this.state.executableModuleArgs, this.state.executableModuleFile))
   }
 
   generateJson(name, description, outputFilePath, args, files) {
@@ -89,7 +87,8 @@ class ExecutableCreationWizard extends Reflux.Component {
 
   handleFileChange(files) {
     files.map((file) => {
-      this.filesToUpload.push(path.join(file.path))
+      // this.filesToUpload.push(path.join(file.path))
+      this.setState({ executableModuleFile: path.join(file.path) })
     })
   }
 
@@ -98,11 +97,24 @@ class ExecutableCreationWizard extends Reflux.Component {
   }
 
   executeModule() {
-    let executablePath = path.join(this.state.executableModuleFile.pop())
+    console.log('execute module called')
+    console.log(JSON.stringify(this.state))
+    /*if(this.state.executableModuleFile.size == 0)
+    {
+      const err = 'no executable file specified. Click to select or drag and drop the executable file to be executed.'
+      console.log(err)
+      this.setState({ executableModuleOutput: err })
+    }
+    let executablePath = path.join(this.state.executableModuleFile.pop())*/
+    let executablePath = this.state.executableModuleFile
     let outputPath = path.join(this.state.executableModuleOutputFilePath)
-    let args = this.state.executableModuleArgs
-    console.log('args passed ' + args)
-    const child = execFile(executablePath, [args], (error, stdout, stderr) => {
+    let args = this.state.executableModuleArgs.split(';')
+
+    console.log('executablePath ' + executablePath)
+    console.log('outputPath ' + outputPath)
+    console.log('args ' + args)
+
+    const child = execFile(executablePath, args, (error, stdout, stderr) => {
       if (error) {
         throw error;
       }
@@ -157,7 +169,7 @@ class ExecutableCreationWizard extends Reflux.Component {
       <div className="form-group">
         <label className="form-label">Output</label>
         <fieldset disabled>
-          <textarea className="form-input" id="executableModuleOutput" value={this.state.executableModuleOutput} onChange={this.handleFormInputChange} rows="3"></textarea>
+          <textarea className="form-input" id="executableModuleOutput" name='executableModuleOutput' value={this.state.executableModuleOutput} onChange={this.handleFormInputChange} rows="3"></textarea>
         </fieldset>
       </div>
     </form>
