@@ -12,6 +12,7 @@ class TableRenderer extends Reflux.Component {
 
   constructor(props) {
     super(props)
+    console.log(props)
     this.customModules = []
     this.modulesFolder = this.props.modulesFolder
     let files = fs.readdirSync(this.modulesFolder)

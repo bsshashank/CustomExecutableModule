@@ -2,9 +2,10 @@
 
 import React from 'react'
 import path from 'path'
+import fs from 'fs'
 
 import { defineMessages } from 'react-intl'
-import { ic_explore } from 'react-icons-kit/md/ic_explore'
+import { ic_apps } from 'react-icons-kit/md/ic_apps'
 
 import packageInfo from './package.json'
 import CustomExecutableView from './views/CustomExecutableView'
@@ -55,6 +56,36 @@ class CustomExecutable implements IExtension {
       this._fileStorage = fileStorage
       this._settings = settings
       this._defaultRoute = defaultRoute
+
+      let appWorkingDirectory = path.join(fileStorage.config.paths.data, fileStorage.extension)
+      let asar = path.join(fileStorage.config.paths.data, 'Plugins', fileStorage.extension + '.asar')
+      let asarFolderToExtract = 'extract'
+
+      console.log('path config ' + JSON.stringify(fileStorage.config.paths))
+      console.log('extraction path ' + appWorkingDirectory)
+      console.log('plugin asar path ' + asar)
+
+      if (!fs.existsSync(path.join(appWorkingDirectory))) {
+        fs.mkdirSync(appWorkingDirectory);
+      }
+
+      fs.readdir(asar, function (err, files) {
+        if (err)
+          throw 'Error occurred while trying to extract the necessary files for the plugin installation'
+        files.map(function (file) {
+          return path.join(asar, file)
+        }).filter(function (file) {
+          return (path.basename(file) === asarFolderToExtract)
+        }).forEach(function (file) {
+          console.log('file ' + file)
+          fs.readdir(file, function (err, files) {
+            files.map(function (fileToExtract) {
+              fs.createReadStream(path.join(file, fileToExtract)).pipe(fs.createWriteStream(path.join(appWorkingDirectory, path.basename(fileToExtract))))
+            })
+          })
+        })
+      })
+      console.log('extraction completed')
     }
 
     get id(): string {
@@ -95,7 +126,7 @@ class CustomExecutable implements IExtension {
 
     get linkIcon(): React$Element<*> {
       return (
-        ic_explore
+        ic_apps
       )
     }
 

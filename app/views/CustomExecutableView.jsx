@@ -3,6 +3,7 @@
 import React from 'react'
 import Radium from 'radium'
 import Reflux from 'reflux'
+import { withRouter } from 'react-router'
 import { object } from 'prop-types'
 import path from 'path'
 
@@ -25,6 +26,18 @@ class CustomExecutableView extends Reflux.Component {
     this.state = {
       displayWizard: false,
       jsonModule: ''
+    }
+
+    //React to call from LibraryModule
+    let request = props.location.state
+
+    if(request != null && request.caller == "LibraryModule") {
+      //distinguish between functions
+      if(request.function == "pgp"){
+        var data = request.document
+        console.log("I need to encrypt this file: ", data)
+        
+      }
     }
   }
 
@@ -62,7 +75,7 @@ class CustomExecutableView extends Reflux.Component {
     else
       return (
         <div>
-          <button className='btn btn-primary' type='button' onClick={ this.createModule } > Create new Module</button>
+          <button className='btn btn-primary' type='button' onClick={this.createModule} > Create new Module</button>
           <TableRenderer modulesFolder={this.workingFolder} displayModule={this.toggleDisplayModule} />
         </div>
       )
@@ -91,4 +104,4 @@ class CustomExecutableView extends Reflux.Component {
   }
 }
 
-export default Radium(CustomExecutableView)
+export default withRouter(Radium(CustomExecutableView))
