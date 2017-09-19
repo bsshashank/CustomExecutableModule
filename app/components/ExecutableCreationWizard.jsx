@@ -39,7 +39,12 @@ class ExecutableCreationWizard extends Reflux.Component {
     }
     else {
       let jsonModule = this.getJson(this.props.jsonModule)
-      console.log('jsonModule ' + JSON.stringify(jsonModule))
+      if(this.props.params != undefined){
+        let args = jsonModule.args
+        args = args.substring(args.indexOf(';') + 1)
+        let modifiedArgs = path.dirname(path.join(this.props.params.pop())) + ';' + args
+        jsonModule.args = modifiedArgs
+      }
       this.state = {
         editable: false,
         executableModuleName: jsonModule.name,
@@ -49,6 +54,8 @@ class ExecutableCreationWizard extends Reflux.Component {
         executableModuleFile: jsonModule.files,
         executableModuleOutput:'Output of the operation will be displayed here.'
       }
+      this.createModule(this.generateJson(this.state.executableModuleName, this.state.executableModuleDescription, this.state.executableModuleOutputFilePath, this.state.executableModuleArgs, this.state.executableModuleFile))
+      console.log('saved module with args ' + this.state.executableModuleArgs)
     }
   }
 
@@ -87,7 +94,6 @@ class ExecutableCreationWizard extends Reflux.Component {
 
   handleFileChange(files) {
     files.map((file) => {
-      // this.filesToUpload.push(path.join(file.path))
       this.setState({ executableModuleFile: path.join(file.path) })
     })
   }

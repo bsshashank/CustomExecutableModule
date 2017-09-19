@@ -16,6 +16,7 @@ import TableRenderer from '../components/TableRenderer'
 class CustomExecutableView extends Reflux.Component {
   fileStorage: Object
   workingFolder: string
+  moduleParams: object
 
   constructor(props) {
     super(props)
@@ -23,10 +24,7 @@ class CustomExecutableView extends Reflux.Component {
     this.workingFolder = path.join(this.fileStorage.config.paths.data, this.fileStorage.extension)
     this.createModule = this.createModule.bind(this)
     this.toggleDisplayModule = this.toggleDisplayModule.bind(this)
-    this.state = {
-      displayWizard: false,
-      jsonModule: ''
-    }
+    this.moduleParams = []
 
     //React to call from LibraryModule
     let request = props.location.state
@@ -36,7 +34,22 @@ class CustomExecutableView extends Reflux.Component {
       if(request.function == "pgp"){
         var data = request.document
         console.log("I need to encrypt this file: ", data)
-        
+        if(!Array.isArray(data)){
+          this.moduleParams.push(data)
+        }
+        else
+          this.moduleParams = this.moduleParams.concat(data)
+        this.state = {
+          displayWizard: true,
+          jsonModule: 'gpg-email',
+        }
+      }
+    }
+    else
+    {
+      this.state = {
+        displayWizard: false,
+        jsonModule: ''
       }
     }
   }
@@ -71,36 +84,14 @@ class CustomExecutableView extends Reflux.Component {
 
   render() {
     if (this.state.displayWizard)
-      return <ExecutableCreationWizard fileStorage={this.fileStorage} jsonModule={this.state.jsonModule} displayModules={this.toggleDisplayModule} />
+      return <ExecutableCreationWizard fileStorage={this.fileStorage} jsonModule={this.state.jsonModule} params={this.moduleParams} displayModules={this.toggleDisplayModule} />
     else
       return (
         <div>
-          <button className='btn btn-primary' type='button' onClick={this.createModule} > Create new Module</button>
+          <button className='btn btn-primary' type='button' onClick={this.createModule} >Create new Module</button>
           <TableRenderer modulesFolder={this.workingFolder} displayModule={this.toggleDisplayModule} />
         </div>
       )
-    // const baseUri = this.props.match.url
-    /*return(
-      <div style={{ height: '100%', width: '100%', display: 'flex' }}>
-        <div className='column col-3' style={{ borderRight: '.1rem solid #f0f1f4', paddingLeft: '1em' }}>
-          <h4>ExecutableModule</h4>
-          <div className='divider' />
-          <ul className='nav'>
-            <NavItem target={`${baseUri}/newModuleWizard`}>
-              <FormattedMessage id='app.customexecutablemodule.nav.newmodulewizard'
-                description='Navigational link to new custom module wizard'
-                defaultMessage='New Module Wizard' />
-            </NavItem>
-          </ul>
-        </div>
-        <div className='column col-9' style={{ paddingLeft: '1em', height: '80vh' }}>
-          <Switch>
-            <Route path={`${baseUri}/newModuleWizard`} component={ExecutableCreationWizard} />
-            <Route exact path={baseUri} render={() => (<Redirect to={`${baseUri}/newModuleWizard`} />)} />
-          </Switch>
-        </div>
-      </div>
-    )*/
   }
 }
 
